@@ -163,8 +163,8 @@ export async function sendNightlyReport(
             .header h1 { font-size: 22px !important; }
             .content { padding: 24px 16px !important; }
             .footer { padding: 20px 16px !important; font-size: 12px !important; }
-            .stats-list { padding: 16px 16px !important; }
-            .tasks-list { padding: 16px 16px !important; }
+            .stats-list { padding: 8px 8px !important; }
+            .tasks-list { padding: 8px 8px !important; }
           }
         </style>
       </head>
@@ -182,7 +182,7 @@ export async function sendNightlyReport(
             
             <!-- Stats -->
             <div class="stats-list" style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
-              <ul style="margin: 0; padding-left: 12px; list-style: none;">
+              <ul style="margin: 0; padding-left: 12px; list-style: disc;">
                 <li style="color: #f59e0b; font-size: 15px; font-weight: 600; margin-bottom: 10px;">Completed Tasks: <span style="color: #fff;">${completed.length}</span></li>
                 <li style="color: #f59e0b; font-size: 15px; font-weight: 600; margin-bottom: 10px;">Pending Tasks: <span style="color: #fff;">${pending.length}</span></li>
                 <li style="color: #f59e0b; font-size: 15px; font-weight: 600;">Efficiency %: <span style="color: #fff;">${pct}%</span></li>
