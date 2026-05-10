@@ -94,7 +94,9 @@ export async function sendNightlyReport(
 ): Promise<void> {
   const completed = tasks.filter((t) => t.status === "completed");
   const pending = tasks.filter((t) => t.status === "pending");
-  const pct = tasks.length > 0 ? Math.round((completed.length / tasks.length) * 100) :  const transporter = userTransporter(email, appPassword);
+  const pct = tasks.length > 0 ? Math.round((completed.length / tasks.length) * 100) : 0;
+
+  const transporter = userTransporter(email, appPassword);
   await transporter.sendMail({
     from: `"Tickd" <${email}>`,
     to: email,
@@ -119,7 +121,7 @@ export async function sendNightlyReport(
     .stats { width: 100%; margin-bottom: 34px; border-collapse: separate; border-spacing: 12px 0; }
     .stat-card { background: #18181b; border-radius: 18px; padding: 24px 12px; text-align: center; border: 1px solid #232326; width: 31%; }
     .stat-number { font-size: 34px; font-weight: 700; margin-bottom: 6px; }
-    .green { color: #10b981; }
+    .green { color: #22c55e; }
     .red { color: #f43f5e; }
     .orange { color: #f59e0b; }
     .stat-label { color: #a1a1aa; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
@@ -203,4 +205,4 @@ export async function sendNightlyReport(
 </html>
     `,
   });
-}   
+}
