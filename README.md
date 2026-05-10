@@ -27,7 +27,7 @@ Tickd is a premium, secure daily task management application designed for high-p
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/tickd.git
+git clone https://github.com/sarvan-2187/tickd.git
 ```
 
 ### 2. Install dependencies
@@ -51,7 +51,3 @@ npm run dev
 
 ## Security
 Tickd takes security seriously. We use bank-grade encryption for all sensitive user credentials and implement secure, session-based authentication to ensure your data stays yours.
-
-## License
-This project is licensed under the MIT License.
-
