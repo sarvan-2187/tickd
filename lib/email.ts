@@ -158,17 +158,17 @@ export async function sendNightlyReport(
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
         <style>
           @media (max-width: 600px) {
-            .container { margin: 10px !important; border-radius: 12px !important; }
-            .header { padding: 24px 16px !important; }
-            .header h1 { font-size: 22px !important; }
-            .content { padding: 24px 16px !important; }
-            .footer { padding: 20px 16px !important; font-size: 12px !important; }
+            .container { margin: 4px !important; border-radius: 12px !important; }
+            .header { padding: 12px 8px !important; }
+            .header h1 { font-size: 16px !important; }
+            .content { padding: 12px 8px !important; }
+            .footer { padding: 10px 8px !important; font-size: 12px !important; }
             .stats-list { padding: 8px 8px !important; }
             .tasks-list { padding: 8px 8px !important; }
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 10px; background: #1a1a1a; font-family: 'Metrophobic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+      <body style="margin: 0; padding: 4px; background: #1a1a1a; font-family: 'Metrophobic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
         <div class="container" style="max-width: 650px; margin: 0 auto; background: #000; border-radius: 20px; overflow: hidden; border: 2px solid #f59e0b;">
           
           <!-- Header -->
