@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tickd ⚡️
 
-## Getting Started
+Tickd is a premium, secure daily task management application designed for high-performance individuals who value focus and data privacy.
 
-First, run the development server:
+![Tickd Preview](https://daily-tracker-five.vercel.app/og-image.png)
 
+## ✨ Features
+
+- **Passwordless Authentication**: Secure login via one-time codes (OTP) sent directly to your Gmail. No more passwords to remember.
+- **Automated Routines**: Master your habits with tasks that automatically reset every morning. Set them once, stay consistent forever.
+- **Nightly Summaries**: Close your day with clarity. Receive a beautiful, automated HTML email at 23:59 summarizing your progress.
+- **Privacy First**: All sensitive data, including App Passwords, are AES-256-GCM encrypted at rest.
+- **Premium UI/UX**: Built with a stunning glassmorphic design system, fluid animations (Framer Motion), and ultra-smooth scrolling (Lenis).
+- **Responsive Design**: A seamless experience across desktop, tablet, and mobile devices.
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **UI Components**: [Shadcn UI](https://ui.shadcn.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Database**: [Neon](https://neon.tech/) (Serverless PostgreSQL)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Smooth Scroll**: [Lenis](https://lenis.darkroom.engineering/)
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/tickd.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Environment Variables
+Create a `.env` file in the root directory and add the following:
+```env
+DATABASE_URL=your_neon_db_url
+JWT_SECRET=your_jwt_secret
+SYSTEM_GMAIL=your_gmail@gmail.com
+SYSTEM_GMAIL_PASS=your_gmail_app_password
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Run the development server
+```bash
+npm run dev
+```
 
-## Learn More
+## 🔒 Security
+Tickd takes security seriously. We use bank-grade encryption for all sensitive user credentials and implement secure, session-based authentication to ensure your data stays yours.
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 License
+This project is licensed under the MIT License.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

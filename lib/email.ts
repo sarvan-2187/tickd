@@ -1,0 +1,159 @@
+import nodemailer from "nodemailer";
+
+type Task = {
+  id: string;
+  title: string;
+  status: "pending" | "completed";
+};
+
+/**
+ * Creates a Nodemailer transporter using the system Gmail credentials.
+ * Used for sending OTP verification emails.
+ */
+function systemTransporter() {
+  return nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.SYSTEM_GMAIL,
+      pass: process.env.SYSTEM_APP_PASSWORD,
+    },
+  });
+}
+
+/**
+ * Creates a transporter using a user's own Gmail App Password.
+ * Used for sending nightly task reports.
+ */
+function userTransporter(email: string, appPassword: string) {
+  return nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: email,
+      pass: appPassword,
+    },
+  });
+}
+
+/**
+ * Sends a 6-digit OTP email to the user via the system Gmail account.
+ */
+export async function sendOTP(to: string, code: string): Promise<void> {
+  const transporter = systemTransporter();
+  await transporter.sendMail({
+    from: `"Tickd" <${process.env.SYSTEM_GMAIL}>`,
+    to,
+    subject: "Your Tickd Login Code",
+    html: `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #0f0f0f; border-radius: 16px; overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #d97706, #b45309); padding: 32px; text-align: center;">
+          <h1 style="color: #fff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Tickd</h1>
+          <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0; font-size: 14px;">Your login verification code</p>
+        </div>
+        <div style="padding: 40px 32px; background: #1a1a1a;">
+          <p style="color: #9ca3af; font-size: 15px; margin: 0 0 24px;">Enter this 6-digit code to sign in. It expires in <strong style="color: #f59e0b;">5 minutes</strong>.</p>
+          <div style="text-align: center; margin: 32px 0;">
+            <span style="display: inline-block; background: #0f0f0f; border: 2px solid #d97706; border-radius: 12px; padding: 20px 40px; font-size: 40px; font-weight: 800; letter-spacing: 12px; color: #f59e0b; font-family: monospace;">${code}</span>
+          </div>
+          <p style="color: #6b7280; font-size: 13px; margin: 24px 0 0; text-align: center;">If you didn't request this, you can safely ignore this email.</p>
+        </div>
+        <div style="padding: 16px 32px; background: #111; text-align: center;">
+          <p style="color: #4b5563; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} Tickd</p>
+        </div>
+      </div>
+    `,
+  });
+}
+
+/**
+ * Verifies connectivity of a user's App Password by sending a hidden test email.
+ */
+export async function sendTestEmail(email: string, appPassword: string): Promise<void> {
+  const transporter = userTransporter(email, appPassword);
+  await transporter.sendMail({
+    from: `"Tickd" <${email}>`,
+    to: email,
+    subject: "Tickd — SMTP Configuration Verified",
+    html: `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px; background: #1a1a1a; border-radius: 16px;">
+        <h2 style="color: #f59e0b; margin: 0 0 16px;">✅ SMTP Verified</h2>
+        <p style="color: #9ca3af;">Your Gmail App Password has been successfully verified. Nightly task report emails will be sent to this address.</p>
+      </div>
+    `,
+  });
+}
+
+/**
+ * Builds and sends the nightly HTML task summary email.
+ */
+export async function sendNightlyReport(
+  email: string,
+  appPassword: string,
+  tasks: Task[],
+  dateStr: string
+): Promise<void> {
+  const completed = tasks.filter((t) => t.status === "completed");
+  const pending = tasks.filter((t) => t.status === "pending");
+  const pct = tasks.length > 0 ? Math.round((completed.length / tasks.length) * 100) : 0;
+
+  const taskRow = (t: Task) => `
+    <tr>
+      <td style="padding: 12px 16px; border-bottom: 1px solid #2a2a2a; color: ${t.status === "completed" ? "#22c55e" : "#ef4444"};">
+        ${t.status === "completed" ? "✅" : "⏳"} ${t.title}
+      </td>
+      <td style="padding: 12px 16px; border-bottom: 1px solid #2a2a2a; text-align: right;">
+        <span style="display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 12px; font-weight: 600;
+          background: ${t.status === "completed" ? "rgba(34,197,94,0.15)" : "rgba(239,68,68,0.15)"};
+          color: ${t.status === "completed" ? "#22c55e" : "#ef4444"};">
+          ${t.status}
+        </span>
+      </td>
+    </tr>
+  `;
+
+  const transporter = userTransporter(email, appPassword);
+  await transporter.sendMail({
+    from: `"Tickd" <${email}>`,
+    to: email,
+    subject: `Tickd — ${dateStr} Summary (${pct}% complete)`,
+    html: `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 560px; margin: 0 auto; background: #0f0f0f; border-radius: 16px; overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #d97706, #b45309); padding: 32px;">
+          <h1 style="color: #fff; margin: 0; font-size: 24px; font-weight: 700;">Daily Summary</h1>
+          <p style="color: rgba(255,255,255,0.8); margin: 6px 0 0; font-size: 14px;">${dateStr}</p>
+        </div>
+        <div style="padding: 32px; background: #1a1a1a;">
+          <div style="display: flex; gap: 16px; margin-bottom: 32px;">
+            <div style="flex: 1; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); border-radius: 12px; padding: 16px; text-align: center;">
+              <div style="font-size: 32px; font-weight: 800; color: #22c55e;">${completed.length}</div>
+              <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">Completed</div>
+            </div>
+            <div style="flex: 1; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 16px; text-align: center;">
+              <div style="font-size: 32px; font-weight: 800; color: #ef4444;">${pending.length}</div>
+              <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">Pending</div>
+            </div>
+            <div style="flex: 1; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); border-radius: 12px; padding: 16px; text-align: center;">
+              <div style="font-size: 32px; font-weight: 800; color: #f59e0b;">${pct}%</div>
+              <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">Done</div>
+            </div>
+          </div>
+          ${tasks.length > 0 ? `
+          <table style="width: 100%; border-collapse: collapse; background: #0f0f0f; border-radius: 12px; overflow: hidden;">
+            <thead>
+              <tr style="background: #1f1f1f;">
+                <th style="padding: 12px 16px; text-align: left; color: #6b7280; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Task</th>
+                <th style="padding: 12px 16px; text-align: right; color: #6b7280; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tasks.map(taskRow).join("")}
+            </tbody>
+          </table>
+          ` : `<p style="color: #6b7280; text-align: center;">No tasks were created today.</p>`}
+        </div>
+        <div style="padding: 16px 32px; background: #111; text-align: center;">
+          <p style="color: #4b5563; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} Tickd — Automated nightly report</p>
+        </div>
+      </div>
+    `,
+  });
+}
