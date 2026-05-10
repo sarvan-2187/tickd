@@ -114,7 +114,7 @@ export function TaskCard({ task, onToggle, onDelete, onEdit, style, readOnly }: 
       {/* Actions */}
       {!readOnly && (
         <div className="flex-shrink-0 flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-          {!completed && (
+          {!completed && !task.recurring_task_id && (
             <button
               id={`task-edit-${task.id}`}
               onClick={() => setEditing(true)}

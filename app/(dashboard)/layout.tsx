@@ -47,8 +47,10 @@ export default function DashboardLayout({
           
           {/* Mobile Header */}
           <div className="md:hidden flex items-center px-4 py-3 border-b border-white/5 relative z-20 bg-black/40 backdrop-blur-md">
-            <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
-            <span className="ml-3 font-bold text-sm tracking-tight text-foreground">Tickd</span>
+            <SidebarTrigger className="text-muted-foreground hover:text-foreground" size={'icon-lg'} />
+            <div className="ml-3 flex items-center gap-3">
+              <span className="font-bold text-xl tracking-tight text-foreground">Tickd</span>
+            </div>
           </div>
 
           {/* Scrollable Content */}
