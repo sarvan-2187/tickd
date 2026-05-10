@@ -184,7 +184,7 @@ export async function sendNightlyReport(
 
           <!-- CTA -->
           <div style="text-align: center; margin-top: 48px; border-top: 1px solid #1a1a1a; pt: 40px;">
-            <a href="https://tickd.vercel.app/tasks" style="display: inline-block; background: #f59e0b; color: #000; padding: 16px 32px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(245,158,11,0.2);">Launch Dashboard</a>
+            <a href="https://tickd-tracker.vercel.app/tasks" style="display: inline-block; background: #f59e0b; color: #000; padding: 16px 32px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(245,158,11,0.2);">Launch Dashboard</a>
           </div>
         </div>
 
