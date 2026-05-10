@@ -18,7 +18,7 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
       <PopoverTrigger asChild>
         <button
           className={cn(
-            "flex items-center gap-3 justify-start text-left font-bold text-4xl hover:opacity-80 transition-opacity text-foreground font-serif",
+            "flex items-center gap-3 justify-start text-left font-bold text-4xl hover:opacity-80 transition-opacity text-foreground font-sans",
             !date && "text-muted-foreground"
           )}
         >
