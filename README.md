@@ -1,6 +1,8 @@
 # Tickd
-
 Tickd is a premium, secure daily task management application designed for high-performance individuals who value focus and data privacy.
+
+## UI
+<img width="1858" height="910" alt="image" src="https://github.com/user-attachments/assets/0acab235-4d23-4106-bb31-56370a474fcf" />
 
 ## Features
 
