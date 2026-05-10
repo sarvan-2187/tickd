@@ -45,22 +45,44 @@ export async function sendOTP(to: string, code: string): Promise<void> {
     to,
     subject: "Your Tickd Login Code",
     html: `
-      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #0f0f0f; border-radius: 16px; overflow: hidden;">
-        <div style="background: linear-gradient(135deg, #d97706, #b45309); padding: 32px; text-align: center;">
-          <h1 style="color: #fff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Tickd</h1>
-          <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0; font-size: 14px;">Your login verification code</p>
-        </div>
-        <div style="padding: 40px 32px; background: #1a1a1a;">
-          <p style="color: #9ca3af; font-size: 15px; margin: 0 0 24px;">Enter this 6-digit code to sign in. It expires in <strong style="color: #f59e0b;">5 minutes</strong>.</p>
-          <div style="text-align: center; margin: 32px 0;">
-            <span style="display: inline-block; background: #0f0f0f; border: 2px solid #d97706; border-radius: 12px; padding: 20px 40px; font-size: 40px; font-weight: 800; letter-spacing: 12px; color: #f59e0b; font-family: monospace;">${code}</span>
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Metrophobic&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+          @media (max-width: 600px) {
+            .container { padding: 0 16px !important; }
+            .header { padding: 24px 16px !important; }
+            .content { padding: 24px 16px !important; }
+            .footer { padding: 12px 16px !important; }
+            .code-display { padding: 16px 24px !important; font-size: 32px !important; letter-spacing: 8px !important; }
+            h1 { font-size: 24px !important; }
+            p { font-size: 14px !important; }
+          }
+        </style>
+      </head>
+      <body style="margin: 0; padding: 0; font-family: 'Metrophobic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+        <div class="container" style="max-width: 480px; margin: 0 auto; background: #0f0f0f; border-radius: 16px; overflow: hidden;">
+          <div class="header" style="background: linear-gradient(135deg, #d97706, #b45309); padding: 32px; text-align: center;">
+            <h1 style="color: #fff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; font-family: 'Playfair Display', serif;">Tickd</h1>
+            <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0; font-size: 14px;">Your login verification code</p>
           </div>
-          <p style="color: #6b7280; font-size: 13px; margin: 24px 0 0; text-align: center;">If you didn't request this, you can safely ignore this email.</p>
+          <div class="content" style="padding: 40px 32px; background: #1a1a1a;">
+            <p style="color: #9ca3af; font-size: 15px; margin: 0 0 24px; line-height: 1.5;">Enter this 6-digit code to sign in. It expires in <strong style="color: #f59e0b;">5 minutes</strong>.</p>
+            <div style="text-align: center; margin: 32px 0;">
+              <span class="code-display" style="display: inline-block; background: #0f0f0f; border: 2px solid #d97706; border-radius: 12px; padding: 20px 40px; font-size: 40px; font-weight: 800; letter-spacing: 12px; color: #f59e0b; font-family: 'Courier New', monospace; word-spacing: 8px;">${code}</span>
+            </div>
+            <p style="color: #6b7280; font-size: 13px; margin: 24px 0 0; text-align: center; line-height: 1.5;">If you didn't request this, you can safely ignore this email.</p>
+          </div>
+          <div class="footer" style="padding: 16px 32px; background: #111; text-align: center;">
+            <p style="color: #4b5563; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} Tickd</p>
+          </div>
         </div>
-        <div style="padding: 16px 32px; background: #111; text-align: center;">
-          <p style="color: #4b5563; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} Tickd</p>
-        </div>
-      </div>
+      </body>
+      </html>
     `,
   });
 }
@@ -75,10 +97,31 @@ export async function sendTestEmail(email: string, appPassword: string): Promise
     to: email,
     subject: "Tickd — SMTP Configuration Verified",
     html: `
-      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px; background: #1a1a1a; border-radius: 16px;">
-        <h2 style="color: #f59e0b; margin: 0 0 16px;">SMTP Verified</h2>
-        <p style="color: #9ca3af;">Your Gmail App Password has been successfully verified. Nightly task report emails will be sent to this address.</p>
-      </div>
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Metrophobic&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+          @media (max-width: 600px) {
+            .container { padding: 0 16px !important; }
+            .content { padding: 24px 16px !important; }
+            h2 { font-size: 18px !important; }
+            p { font-size: 14px !important; }
+          }
+        </link>
+      </head>
+      <body style="margin: 0; padding: 0; font-family: 'Metrophobic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+        <div class="container" style="max-width: 480px; margin: 0 auto; padding: 32px;">
+          <div class="content" style="background: #1a1a1a; padding: 32px; border-radius: 16px;">
+            <h2 style="color: #f59e0b; margin: 0 0 16px; font-size: 20px; font-weight: 700; font-family: 'Playfair Display', serif;">SMTP Verified</h2>
+            <p style="color: #9ca3af; margin: 0; font-size: 15px; line-height: 1.6;">Your Gmail App Password has been successfully verified. Nightly task report emails will be sent to this address.</p>
+          </div>
+        </div>
+      </body>
+      </html>
     `,
   });
 }
@@ -98,30 +141,24 @@ export async function sendNightlyReport(
 
   const taskRow = (t: Task) => `
     <div style="padding: 16px; background: #161616; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03);">
-      <table style="width: 100%;">
-        <tr>
-          <td style="vertical-align: middle;">
-            <div style="display: flex; align-items: center;">
-              <span style="font-size: 18px; margin-right: 12px;">${t.status === "completed" ? "✅" : "⏳"}</span>
-              <div>
-                <div style="color: ${t.status === "completed" ? "#ffffff" : "#9ca3af"}; font-size: 15px; font-weight: 500; text-decoration: ${t.status === "completed" ? "none" : "none"};">
-                  ${t.title}
-                </div>
-                ${t.recurring_task_id ? `
-                  <div style="display: inline-block; margin-top: 4px; font-size: 9px; font-weight: 800; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;">
-                    Routine
-                  </div>
-                ` : ""}
-              </div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 18px; flex-shrink: 0;">${t.status === "completed" ? "✅" : "⏳"}</span>
+        <div style="flex: 1; min-width: 0;">
+          <div style="color: ${t.status === "completed" ? "#ffffff" : "#9ca3af"}; font-size: 15px; font-weight: 500; word-break: break-word;">
+            ${t.title}
+          </div>
+          ${t.recurring_task_id ? `
+            <div style="display: inline-block; margin-top: 4px; font-size: 9px; font-weight: 800; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;">
+              Routine
             </div>
-          </td>
-          <td style="text-align: right; vertical-align: middle; width: 80px;">
-            <span style="font-size: 11px; font-weight: 700; color: ${t.status === "completed" ? "#10b981" : "#f43f5e"}; text-transform: uppercase; letter-spacing: 0.05em;">
-              ${t.status}
-            </span>
-          </td>
-        </tr>
-      </table>
+          ` : ""}
+        </div>
+        <div style="flex-shrink: 0; text-align: right;">
+          <span style="font-size: 11px; font-weight: 700; color: ${t.status === "completed" ? "#10b981" : "#f43f5e"}; text-transform: uppercase; letter-spacing: 0.05em;">
+            ${t.status}
+          </span>
+        </div>
+      </div>
     </div>
   `;
 
@@ -129,76 +166,100 @@ export async function sendNightlyReport(
   await transporter.sendMail({
     from: `"Tickd" <${email}>`,
     to: email,
-    subject: `Tickd — ${dateStr} Summary (${pct}% complete)`,
+    subject: `Tickd | ${dateStr} Summary | (${pct}% complete)`,
     html: `
-      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0a0a0a; border-radius: 24px; overflow: hidden; border: 1px solid #1a1a1a;">
-        <!-- Header -->
-        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 48px 40px; text-align: center;">
-          <div style="margin-bottom: 20px;">
-            <span style="background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 100px; color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Nightly Report</span>
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Metrophobic&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+        <style>
+          @media (max-width: 600px) {
+            .container { border-radius: 12px !important; margin: 0 !important; }
+            .header { padding: 24px 16px !important; }
+            .header h1 { font-size: 24px !important; }
+            .header p { font-size: 14px !important; }
+            .content { padding: 24px 16px !important; }
+            .footer { padding: 16px; }
+            .stats-grid { gap: 8px !important; }
+            .stat-card { padding: 16px !important; }
+            .stat-card .number { font-size: 24px !important; }
+            .stat-card .label { font-size: 10px !important; }
+            .task-header { padding: 0 4px !important; font-size: 14px !important; }
+            .task-header-count { font-size: 11px !important; }
+            .task-row { padding: 12px !important; font-size: 14px !important; }
+            .cta { padding: 14px 24px !important; font-size: 14px !important; margin-top: 24px !important; }
+            .empty-state { padding: 32px 16px !important; }
+          }
+        </style>
+      </head>
+      <body style="margin: 0; padding: 0; font-family: 'Metrophobic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+        <div class="container" style="max-width: 600px; margin: 0 auto; background: #0a0a0a; border-radius: 24px; overflow: hidden; border: 1px solid #1a1a1a;">
+          <!-- Header -->
+          <div class="header" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 48px 40px; text-align: center;">
+            <div style="margin-bottom: 20px;">
+              <span style="background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 100px; color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; display: inline-block;">Nightly Report</span>
+            </div>
+            <h1 style="color: #fff; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em; font-family: 'Playfair Display', serif;">Daily Summary</h1>
+            <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0; font-size: 16px; line-height: 1.4;">${dateStr}</p>
           </div>
-          <h1 style="color: #fff; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em;">Daily Summary</h1>
-          <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0; font-size: 16px;">${dateStr}</p>
+
+          <!-- Stats -->
+          <div class="content" style="padding: 40px;">
+            <div class="stats-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 32px;">
+              <div class="stat-card" style="background: #161616; border: 1px solid rgba(16,185,129,0.1); border-radius: 16px; padding: 20px; text-align: center;">
+                <div class="number" style="font-size: 28px; font-weight: 800; color: #10b981; font-family: 'Playfair Display', serif;">${completed.length}</div>
+                <div class="label" style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Completed</div>
+              </div>
+              <div class="stat-card" style="background: #161616; border: 1px solid rgba(244,63,94,0.1); border-radius: 16px; padding: 20px; text-align: center;">
+                <div class="number" style="font-size: 28px; font-weight: 800; color: #f43f5e; font-family: 'Playfair Display', serif;">${pending.length}</div>
+                <div class="label" style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Pending</div>
+              </div>
+              <div class="stat-card" style="background: #161616; border: 1px solid rgba(245,158,11,0.1); border-radius: 16px; padding: 20px; text-align: center;">
+                <div class="number" style="font-size: 28px; font-weight: 800; color: #f59e0b; font-family: 'Playfair Display', serif;">${pct}%</div>
+                <div class="label" style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Efficiency</div>
+              </div>
+            </div>
+
+            <!-- Task List -->
+            <div>
+              <div class="task-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 0 4px;">
+                <h2 style="color: #fff; margin: 0; font-size: 16px; font-weight: 700; font-family: 'Playfair Display', serif;">Your Tasks</h2>
+                <span class="task-header-count" style="color: #6b7280; font-size: 12px;">${tasks.length} Total</span>
+              </div>
+              
+              ${tasks.length > 0 ? `
+                <div>
+                  ${tasks.map(taskRow).join("")}
+                </div>
+              ` : `
+                <div class="empty-state" style="text-align: center; padding: 48px; background: #161616; border-radius: 16px; border: 1px dashed #2a2a2a;">
+                  <p style="color: #6b7280; margin: 0; font-size: 14px; line-height: 1.5;">No tasks tracked for today.</p>
+                </div>
+              `}
+            </div>
+
+            <!-- CTA -->
+            <div style="text-align: center; margin-top: 48px; padding-top: 40px; border-top: 1px solid #1a1a1a;">
+              <a href="https://tickd-tracker.vercel.app/tasks" class="cta" style="display: inline-block; background: #f59e0b; color: #000; padding: 16px 32px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(245,158,11,0.2);">Launch Dashboard</a>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="footer" style="padding: 32px; background: #0a0a0a; text-align: center; border-top: 1px solid #1a1a1a;">
+            <div style="margin-bottom: 16px;">
+              <span style="color: #f59e0b; font-weight: 800; font-size: 18px; letter-spacing: -0.02em; font-family: 'Playfair Display', serif;">Tickd</span>
+            </div>
+            <p style="color: #4b5563; font-size: 12px; margin: 0; line-height: 1.6;">
+              &copy; ${new Date().getFullYear()} Tickd. All rights reserved.<br/>
+              This is an automated nightly summary of your task activity.
+            </p>
+          </div>
         </div>
-
-        <!-- Stats -->
-        <div style="padding: 40px; background: #0f0f0f;">
-          <div style="display: table; width: 100%; border-spacing: 12px 0; margin: 0 -6px 32px;">
-            <div style="display: table-cell; width: 33.33%;">
-              <div style="background: #161616; border: 1px solid rgba(16,185,129,0.1); border-radius: 16px; padding: 20px; text-align: center;">
-                <div style="font-size: 28px; font-weight: 800; color: #10b981;">${completed.length}</div>
-                <div style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Completed</div>
-              </div>
-            </div>
-            <div style="display: table-cell; width: 33.33%;">
-              <div style="background: #161616; border: 1px solid rgba(244,63,94,0.1); border-radius: 16px; padding: 20px; text-align: center;">
-                <div style="font-size: 28px; font-weight: 800; color: #f43f5e;">${pending.length}</div>
-                <div style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Pending</div>
-              </div>
-            </div>
-            <div style="display: table-cell; width: 33.33%;">
-              <div style="background: #161616; border: 1px solid rgba(245,158,11,0.1); border-radius: 16px; padding: 20px; text-align: center;">
-                <div style="font-size: 28px; font-weight: 800; color: #f59e0b;">${pct}%</div>
-                <div style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Efficiency</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Task List -->
-          <div style="margin-bottom: 40px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 0 4px;">
-              <h2 style="color: #fff; margin: 0; font-size: 16px; font-weight: 700;">Your Tasks</h2>
-              <span style="color: #6b7280; font-size: 12px;">${tasks.length} Total</span>
-            </div>
-            
-            ${tasks.length > 0 ? `
-              <div style="display: block;">
-                ${tasks.map(taskRow).join("")}
-              </div>
-            ` : `
-              <div style="text-align: center; padding: 48px; background: #161616; border-radius: 16px; border: 1px dashed #2a2a2a;">
-                <p style="color: #6b7280; margin: 0; font-size: 14px;">No tasks tracked for today.</p>
-              </div>
-            `}
-          </div>
-
-          <!-- CTA -->
-          <div style="text-align: center; margin-top: 48px; border-top: 1px solid #1a1a1a; pt: 40px;">
-            <a href="https://tickd-tracker.vercel.app/tasks" style="display: inline-block; background: #f59e0b; color: #000; padding: 16px 32px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(245,158,11,0.2);">Launch Dashboard</a>
-          </div>
-        </div>
-
-        <!-- Footer -->
-        <div style="padding: 32px; background: #0a0a0a; text-align: center; border-top: 1px solid #1a1a1a;">
-          <div style="margin-bottom: 16px;">
-            <span style="color: #f59e0b; font-weight: 800; font-size: 18px; letter-spacing: -0.02em;">Tickd</span>
-          </div>
-          <p style="color: #4b5563; font-size: 12px; margin: 0; line-height: 1.6;">
-            &copy; ${new Date().getFullYear()} Tickd. All rights reserved.<br/>
-            This is an automated nightly summary of your task activity.
-          </p>
-        </div>
-      </div>
+      </body>
+      </html>
     `,
   });
 }
