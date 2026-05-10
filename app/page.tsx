@@ -400,7 +400,7 @@ export default function LandingPage() {
                 <div className="w-8 h-8 rounded-md flex items-center justify-center shadow-lg" style={{ background: "#F80" }}>
                   <img src="/apple-touch-icon.png" alt="Tickd Logo" className="w-full h-full object-cover rounded-md" />
                 </div>
-                <span className="text-xl font-bold text-foreground font-serif">Tickd</span>
+                <span className="text-xl font-bold text-foreground font-sans">Tickd</span>
               </div>
               <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
                 Your secure, intelligent task companion. Master your day, every single day.
