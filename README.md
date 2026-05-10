@@ -1,10 +1,8 @@
-# Tickd ⚡️
+# Tickd
 
 Tickd is a premium, secure daily task management application designed for high-performance individuals who value focus and data privacy.
 
-![Tickd Preview](https://daily-tracker-five.vercel.app/og-image.png)
-
-## ✨ Features
+## Features
 
 - **Passwordless Authentication**: Secure login via one-time codes (OTP) sent directly to your Gmail. No more passwords to remember.
 - **Automated Routines**: Master your habits with tasks that automatically reset every morning. Set them once, stay consistent forever.
@@ -13,7 +11,7 @@ Tickd is a premium, secure daily task management application designed for high-p
 - **Premium UI/UX**: Built with a stunning glassmorphic design system, fluid animations (Framer Motion), and ultra-smooth scrolling (Lenis).
 - **Responsive Design**: A seamless experience across desktop, tablet, and mobile devices.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
@@ -23,7 +21,7 @@ Tickd is a premium, secure daily task management application designed for high-p
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Smooth Scroll**: [Lenis](https://lenis.darkroom.engineering/)
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone the repository
 ```bash
@@ -49,9 +47,9 @@ SYSTEM_GMAIL_PASS=your_gmail_app_password
 npm run dev
 ```
 
-## 🔒 Security
+## Security
 Tickd takes security seriously. We use bank-grade encryption for all sensitive user credentials and implement secure, session-based authentication to ensure your data stays yours.
 
-## 📄 License
+## License
 This project is licensed under the MIT License.
 
