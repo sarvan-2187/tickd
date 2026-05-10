@@ -140,23 +140,13 @@ export async function sendNightlyReport(
   const pct = tasks.length > 0 ? Math.round((completed.length / tasks.length) * 100) : 0;
 
   const taskRow = (t: Task) => `
-    <div style="padding: 16px; background: #161616; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03);">
+    <div style="padding: 14px 16px; background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 10px; border-left: 3px solid ${t.status === "completed" ? "#10b981" : "#f43f5e"}; transition: all 0.3s ease;">
       <div style="display: flex; align-items: center; gap: 12px;">
-        <span style="font-size: 18px; flex-shrink: 0;">${t.status === "completed" ? "✅" : "⏳"}</span>
+        <span style="font-size: 16px; flex-shrink: 0;">${t.status === "completed" ? "✓" : "○"}</span>
         <div style="flex: 1; min-width: 0;">
-          <div style="color: ${t.status === "completed" ? "#ffffff" : "#9ca3af"}; font-size: 15px; font-weight: 500; word-break: break-word;">
+          <div style="color: ${t.status === "completed" ? "#9ca3af" : "#fff"}; font-size: 14px; font-weight: 400; word-break: break-word; ${t.status === "completed" ? "text-decoration: line-through;" : ""} opacity: ${t.status === "completed" ? "0.7" : "1"};">
             ${t.title}
           </div>
-          ${t.recurring_task_id ? `
-            <div style="display: inline-block; margin-top: 4px; font-size: 9px; font-weight: 800; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;">
-              Routine
-            </div>
-          ` : ""}
-        </div>
-        <div style="flex-shrink: 0; text-align: right;">
-          <span style="font-size: 11px; font-weight: 700; color: ${t.status === "completed" ? "#10b981" : "#f43f5e"}; text-transform: uppercase; letter-spacing: 0.05em;">
-            ${t.status}
-          </span>
         </div>
       </div>
     </div>
@@ -166,7 +156,7 @@ export async function sendNightlyReport(
   await transporter.sendMail({
     from: `"Tickd" <${email}>`,
     to: email,
-    subject: `Tickd | ${dateStr} Summary | (${pct}% complete)`,
+    subject: `Tickd • ${dateStr} • ${pct}% complete`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -174,89 +164,83 @@ export async function sendNightlyReport(
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://fonts.googleapis.com/css2?family=Metrophobic&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
         <style>
           @media (max-width: 600px) {
-            .container { border-radius: 12px !important; margin: 0 !important; }
-            .header { padding: 24px 16px !important; }
-            .header h1 { font-size: 24px !important; }
-            .header p { font-size: 14px !important; }
-            .content { padding: 24px 16px !important; }
-            .footer { padding: 16px; }
-            .stats-grid { gap: 8px !important; }
-            .stat-card { padding: 16px !important; }
-            .stat-card .number { font-size: 24px !important; }
-            .stat-card .label { font-size: 10px !important; }
-            .task-header { padding: 0 4px !important; font-size: 14px !important; }
-            .task-header-count { font-size: 11px !important; }
-            .task-row { padding: 12px !important; font-size: 14px !important; }
-            .cta { padding: 14px 24px !important; font-size: 14px !important; margin-top: 24px !important; }
-            .empty-state { padding: 32px 16px !important; }
+            .container { margin: 0 !important; border-radius: 16px !important; }
+            .header { padding: 32px 20px !important; }
+            .header h1 { font-size: 28px !important; }
+            .content { padding: 20px !important; }
+            .stats-grid { gap: 12px !important; }
+            .stat-item { padding: 14px !important; }
+            .stat-num { font-size: 26px !important; }
+            .tasks-section { margin-top: 24px !important; }
+            .cta-btn { padding: 12px 24px !important; font-size: 14px !important; }
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; font-family: 'Metrophobic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-        <div class="container" style="max-width: 600px; margin: 0 auto; background: #0a0a0a; border-radius: 24px; overflow: hidden; border: 1px solid #1a1a1a;">
+      <body style="margin: 0; padding: 20px; background: #050505; font-family: 'Metrophobic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+        <div class="container" style="max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%); border-radius: 20px; overflow: hidden; border: 1px solid rgba(245,158,11,0.15); box-shadow: 0 20px 60px rgba(0,0,0,0.8);">
+          
           <!-- Header -->
-          <div class="header" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 48px 40px; text-align: center;">
-            <div style="margin-bottom: 20px;">
-              <span style="background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 100px; color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; display: inline-block;">Nightly Report</span>
-            </div>
-            <h1 style="color: #fff; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em; font-family: 'Playfair Display', serif;">Daily Summary</h1>
-            <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0; font-size: 16px; line-height: 1.4;">${dateStr}</p>
+          <div class="header" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 40px 32px; text-align: center; position: relative;">
+            <h1 style="color: #fff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; font-family: 'Playfair Display', serif;">Daily Summary</h1>
+            <p style="color: rgba(255,255,255,0.85); margin: 12px 0 0; font-size: 14px; font-weight: 400;">${dateStr}</p>
           </div>
 
-          <!-- Stats -->
-          <div class="content" style="padding: 40px;">
-            <div class="stats-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 32px;">
-              <div class="stat-card" style="background: #161616; border: 1px solid rgba(16,185,129,0.1); border-radius: 16px; padding: 20px; text-align: center;">
-                <div class="number" style="font-size: 28px; font-weight: 800; color: #10b981; font-family: 'Playfair Display', serif;">${completed.length}</div>
-                <div class="label" style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Completed</div>
+          <!-- Progress -->
+          <div class="content" style="padding: 32px;">
+            <div style="margin-bottom: 28px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
+                <span style="font-size: 13px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Progress</span>
+                <span style="font-size: 24px; font-weight: 700; color: #f59e0b; font-family: 'Playfair Display', serif;">${pct}%</span>
               </div>
-              <div class="stat-card" style="background: #161616; border: 1px solid rgba(244,63,94,0.1); border-radius: 16px; padding: 20px; text-align: center;">
-                <div class="number" style="font-size: 28px; font-weight: 800; color: #f43f5e; font-family: 'Playfair Display', serif;">${pending.length}</div>
-                <div class="label" style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Pending</div>
-              </div>
-              <div class="stat-card" style="background: #161616; border: 1px solid rgba(245,158,11,0.1); border-radius: 16px; padding: 20px; text-align: center;">
-                <div class="number" style="font-size: 28px; font-weight: 800; color: #f59e0b; font-family: 'Playfair Display', serif;">${pct}%</div>
-                <div class="label" style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Efficiency</div>
+              <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; border: 1px solid rgba(245,158,11,0.1);">
+                <div style="height: 100%; background: linear-gradient(90deg, #f59e0b, #d97706); width: ${pct}%; transition: width 0.6s ease;"></div>
               </div>
             </div>
 
-            <!-- Task List -->
-            <div>
-              <div class="task-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 0 4px;">
-                <h2 style="color: #fff; margin: 0; font-size: 16px; font-weight: 700; font-family: 'Playfair Display', serif;">Your Tasks</h2>
-                <span class="task-header-count" style="color: #6b7280; font-size: 12px;">${tasks.length} Total</span>
+            <!-- Stats -->
+            <div class="stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;">
+              <div class="stat-item" style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); border-radius: 14px; padding: 18px; text-align: center;">
+                <div class="stat-num" style="font-size: 28px; font-weight: 700; color: #10b981; font-family: 'Playfair Display', serif;">${completed.length}</div>
+                <div style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px;">Completed</div>
               </div>
+              <div class="stat-item" style="background: rgba(244,63,94,0.08); border: 1px solid rgba(244,63,94,0.2); border-radius: 14px; padding: 18px; text-align: center;">
+                <div class="stat-num" style="font-size: 28px; font-weight: 700; color: #f43f5e; font-family: 'Playfair Display', serif;">${pending.length}</div>
+                <div style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px;">Pending</div>
+              </div>
+            </div>
+
+            <!-- Tasks -->
+            <div class="tasks-section">
+              <h2 style="color: #fff; margin: 0 0 14px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Tasks (${tasks.length})</h2>
               
               ${tasks.length > 0 ? `
                 <div>
                   ${tasks.map(taskRow).join("")}
                 </div>
               ` : `
-                <div class="empty-state" style="text-align: center; padding: 48px; background: #161616; border-radius: 16px; border: 1px dashed #2a2a2a;">
-                  <p style="color: #6b7280; margin: 0; font-size: 14px; line-height: 1.5;">No tasks tracked for today.</p>
+                <div style="text-align: center; padding: 32px 16px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.08);">
+                  <p style="color: #6b7280; margin: 0; font-size: 13px;">No tasks tracked today</p>
                 </div>
               `}
             </div>
 
             <!-- CTA -->
-            <div style="text-align: center; margin-top: 48px; padding-top: 40px; border-top: 1px solid #1a1a1a;">
-              <a href="https://tickd-tracker.vercel.app/tasks" class="cta" style="display: inline-block; background: #f59e0b; color: #000; padding: 16px 32px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(245,158,11,0.2);">Launch Dashboard</a>
+            <div style="text-align: center; margin-top: 32px;">
+              <a href="https://tickd-tracker.vercel.app/tasks" class="cta-btn" style="display: inline-block; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; padding: 14px 32px; border-radius: 10px; font-size: 15px; font-weight: 600; text-decoration: none; box-shadow: 0 8px 24px rgba(245,158,11,0.25); border: none; cursor: pointer;">View Dashboard →</a>
             </div>
           </div>
 
           <!-- Footer -->
-          <div class="footer" style="padding: 32px; background: #0a0a0a; text-align: center; border-top: 1px solid #1a1a1a;">
-            <div style="margin-bottom: 16px;">
-              <span style="color: #f59e0b; font-weight: 800; font-size: 18px; letter-spacing: -0.02em; font-family: 'Playfair Display', serif;">Tickd</span>
-            </div>
-            <p style="color: #4b5563; font-size: 12px; margin: 0; line-height: 1.6;">
-              &copy; ${new Date().getFullYear()} Tickd. All rights reserved.<br/>
-              This is an automated nightly summary of your task activity.
+          <div style="padding: 24px 32px; background: rgba(0,0,0,0.4); border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
+            <p style="color: #6b7280; font-size: 11px; margin: 0; line-height: 1.6; font-weight: 400;">
+              <span style="color: #f59e0b; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 12px;">Tickd</span> • Your automated task companion<br/>
+              © ${new Date().getFullYear()} All rights reserved
             </p>
           </div>
+
         </div>
       </body>
       </html>
