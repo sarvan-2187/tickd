@@ -76,7 +76,7 @@ export async function sendTestEmail(email: string, appPassword: string): Promise
     subject: "Tickd — SMTP Configuration Verified",
     html: `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px; background: #1a1a1a; border-radius: 16px;">
-        <h2 style="color: #f59e0b; margin: 0 0 16px;">✅ SMTP Verified</h2>
+        <h2 style="color: #f59e0b; margin: 0 0 16px;">SMTP Verified</h2>
         <p style="color: #9ca3af;">Your Gmail App Password has been successfully verified. Nightly task report emails will be sent to this address.</p>
       </div>
     `,
@@ -96,113 +96,109 @@ export async function sendNightlyReport(
   const pending = tasks.filter((t) => t.status === "pending");
   const pct = tasks.length > 0 ? Math.round((completed.length / tasks.length) * 100) : 0;
 
+  const taskRow = (t: Task) => `
+    <div style="padding: 16px; background: #161616; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03);">
+      <table style="width: 100%;">
+        <tr>
+          <td style="vertical-align: middle;">
+            <div style="display: flex; align-items: center;">
+              <span style="font-size: 18px; margin-right: 12px;">${t.status === "completed" ? "✅" : "⏳"}</span>
+              <div>
+                <div style="color: ${t.status === "completed" ? "#ffffff" : "#9ca3af"}; font-size: 15px; font-weight: 500; text-decoration: ${t.status === "completed" ? "none" : "none"};">
+                  ${t.title}
+                </div>
+                ${t.recurring_task_id ? `
+                  <div style="display: inline-block; margin-top: 4px; font-size: 9px; font-weight: 800; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;">
+                    Routine
+                  </div>
+                ` : ""}
+              </div>
+            </div>
+          </td>
+          <td style="text-align: right; vertical-align: middle; width: 80px;">
+            <span style="font-size: 11px; font-weight: 700; color: ${t.status === "completed" ? "#10b981" : "#f43f5e"}; text-transform: uppercase; letter-spacing: 0.05em;">
+              ${t.status}
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  `;
+
   const transporter = userTransporter(email, appPassword);
   await transporter.sendMail({
     from: `"Tickd" <${email}>`,
     to: email,
     subject: `Tickd — ${dateStr} Summary (${pct}% complete)`,
     html: `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://fonts.googleapis.com/css2?family=Metrophobic&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <style>
-    body { margin: 0; padding: 0; background: #f4f4f5; font-family: 'Metrophobic', -apple-system, Arial, sans-serif; }
-    * { box-sizing: border-box; }
-    .wrapper { width: 100%; padding: 40px 16px; background: #f4f4f5; }
-    .container { max-width: 640px; margin: 0 auto; background: #0c0c0d; border-radius: 28px; overflow: hidden; border: 1px solid #1f1f22; box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 2px 10px rgba(0,0,0,0.08); }
-    .hero { background: radial-gradient(circle at top right, rgba(255,255,255,0.08), transparent 30%), linear-gradient(135deg, #ea580c 0%, #c2410c 100%); padding: 56px 42px; }
-    .badge { display: inline-block; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.92); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 22px; }
-    .title { margin: 0; color: white; font-size: 42px; line-height: 1; font-family: 'Playfair Display', serif; font-weight: 700; letter-spacing: -0.03em; }
-    .subtitle { margin-top: 14px; color: rgba(255,255,255,0.85); font-size: 15px; }
-    .content { padding: 38px; background: #111113; }
-    .stats { width: 100%; margin-bottom: 34px; border-collapse: separate; border-spacing: 12px 0; }
-    .stat-card { background: #18181b; border-radius: 18px; padding: 24px 12px; text-align: center; border: 1px solid #232326; width: 31%; }
-    .stat-number { font-size: 34px; font-weight: 700; margin-bottom: 6px; }
-    .green { color: #22c55e; }
-    .red { color: #f43f5e; }
-    .orange { color: #f59e0b; }
-    .stat-label { color: #a1a1aa; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
-    .section-title { color: #fafafa; font-size: 17px; margin-bottom: 20px; font-weight: 600; }
-    .task { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border: 1px solid #232326; border-radius: 18px; padding: 18px 20px; margin-bottom: 14px; }
-    .task-title { color: #f4f4f5; font-size: 15px; font-weight: 500; }
-    .task-status { display: inline-block; padding: 7px 12px; border-radius: 999px; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
-    .status-completed { background: rgba(34,197,94,0.12); color: #22c55e; }
-    .status-pending { background: rgba(244,63,94,0.12); color: #f43f5e; }
-    .routine { display: inline-block; margin-top: 8px; padding: 4px 8px; border-radius: 8px; background: rgba(245,158,11,0.12); color: #f59e0b; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
-    .cta-wrap { text-align: center; margin-top: 40px; padding-top: 36px; border-top: 1px solid #232326; }
-    .cta { display: inline-block; padding: 16px 30px; border-radius: 14px; background: linear-gradient(135deg, #f59e0b, #ea580c); color: #fff; text-decoration: none; font-weight: 700; font-size: 15px; box-shadow: 0 8px 24px rgba(245,158,11,0.25); }
-    .footer { padding: 48px 28px; text-align: center; border-top: 1px solid #1f1f22; background: #0d0d0f; }
-    .footer-brand { color: #fff; font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 12px; font-weight: 700; }
-    .footer-text { color: #71717a; font-size: 12px; line-height: 1.7; }
-  </style>
-</head>
-<body>
-<div class="wrapper">
-  <div class="container">
-    <div class="hero">
-      <div class="badge">Nightly Productivity Report</div>
-      <h1 class="title">Daily Summary</h1>
-      <div class="subtitle">${dateStr}</div>
-    </div>
-    <div class="content">
-      <table class="stats" width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-          <td class="stat-card">
-            <div class="stat-number green">${completed.length}</div>
-            <div class="stat-label">Completed</div>
-          </td>
-          <td class="stat-card">
-            <div class="stat-number red">${pending.length}</div>
-            <div class="stat-label">Pending</div>
-          </td>
-          <td class="stat-card">
-            <div class="stat-number orange">${pct}%</div>
-            <div class="stat-label">Efficiency</div>
-          </td>
-        </tr>
-      </table>
-      <div class="section-title">Your Tasks</div>
-      ${tasks.length > 0 ? tasks.map(t => `
-        <div class="task">
-          <table width="100%" cellpadding="0" cellspacing="0">
-            <tr>
-              <td>
-                <div class="task-title">
-                  ${t.status === "completed" ? "✅" : "⏳"} ${t.title}
-                </div>
-                ${t.recurring_task_id ? `<div class="routine">Routine</div>` : ""}
-              </td>
-              <td align="right">
-                <span class="task-status ${t.status === "completed" ? "status-completed" : "status-pending"}">
-                  ${t.status}
-                </span>
-              </td>
-            </tr>
-          </table>
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0a0a0a; border-radius: 24px; overflow: hidden; border: 1px solid #1a1a1a;">
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 48px 40px; text-align: center;">
+          <div style="margin-bottom: 20px;">
+            <span style="background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 100px; color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Nightly Report</span>
+          </div>
+          <h1 style="color: #fff; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em;">Daily Summary</h1>
+          <p style="color: rgba(255,255,255,0.8); margin: 8px 0 0; font-size: 16px;">${dateStr}</p>
         </div>
-      `).join("") : `
-        <div class="task" style="text-align:center;padding:40px;">
-          <div style="color:#71717a;">No tasks tracked today.</div>
+
+        <!-- Stats -->
+        <div style="padding: 40px; background: #0f0f0f;">
+          <div style="display: table; width: 100%; border-spacing: 12px 0; margin: 0 -6px 32px;">
+            <div style="display: table-cell; width: 33.33%;">
+              <div style="background: #161616; border: 1px solid rgba(16,185,129,0.1); border-radius: 16px; padding: 20px; text-align: center;">
+                <div style="font-size: 28px; font-weight: 800; color: #10b981;">${completed.length}</div>
+                <div style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Completed</div>
+              </div>
+            </div>
+            <div style="display: table-cell; width: 33.33%;">
+              <div style="background: #161616; border: 1px solid rgba(244,63,94,0.1); border-radius: 16px; padding: 20px; text-align: center;">
+                <div style="font-size: 28px; font-weight: 800; color: #f43f5e;">${pending.length}</div>
+                <div style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Pending</div>
+              </div>
+            </div>
+            <div style="display: table-cell; width: 33.33%;">
+              <div style="background: #161616; border: 1px solid rgba(245,158,11,0.1); border-radius: 16px; padding: 20px; text-align: center;">
+                <div style="font-size: 28px; font-weight: 800; color: #f59e0b;">${pct}%</div>
+                <div style="font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px;">Efficiency</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task List -->
+          <div style="margin-bottom: 40px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 0 4px;">
+              <h2 style="color: #fff; margin: 0; font-size: 16px; font-weight: 700;">Your Tasks</h2>
+              <span style="color: #6b7280; font-size: 12px;">${tasks.length} Total</span>
+            </div>
+            
+            ${tasks.length > 0 ? `
+              <div style="display: block;">
+                ${tasks.map(taskRow).join("")}
+              </div>
+            ` : `
+              <div style="text-align: center; padding: 48px; background: #161616; border-radius: 16px; border: 1px dashed #2a2a2a;">
+                <p style="color: #6b7280; margin: 0; font-size: 14px;">No tasks tracked for today.</p>
+              </div>
+            `}
+          </div>
+
+          <!-- CTA -->
+          <div style="text-align: center; margin-top: 48px; border-top: 1px solid #1a1a1a; pt: 40px;">
+            <a href="https://tickd.vercel.app/tasks" style="display: inline-block; background: #f59e0b; color: #000; padding: 16px 32px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(245,158,11,0.2);">Launch Dashboard</a>
+          </div>
         </div>
-      `}
-      <div class="cta-wrap">
-        <a href="https://tickd.vercel.app/tasks" class="cta">Open Tickd Dashboard</a>
+
+        <!-- Footer -->
+        <div style="padding: 32px; background: #0a0a0a; text-align: center; border-top: 1px solid #1a1a1a;">
+          <div style="margin-bottom: 16px;">
+            <span style="color: #f59e0b; font-weight: 800; font-size: 18px; letter-spacing: -0.02em;">Tickd</span>
+          </div>
+          <p style="color: #4b5563; font-size: 12px; margin: 0; line-height: 1.6;">
+            &copy; ${new Date().getFullYear()} Tickd. All rights reserved.<br/>
+            This is an automated nightly summary of your task activity.
+          </p>
+        </div>
       </div>
-    </div>
-    <div class="footer">
-      <div class="footer-brand">Tickd</div>
-      <div class="footer-text">
-        &copy; ${new Date().getFullYear()} Tickd. All rights reserved.<br/>
-        This is an automated nightly summary of your task activity.
-      </div>
-    </div>
-  </div>
-</div>
-</body>
-</html>
     `,
   });
 }
