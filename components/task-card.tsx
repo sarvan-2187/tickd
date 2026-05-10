@@ -6,7 +6,7 @@ interface Task {
   id: string;
   title: string;
   status: "pending" | "completed";
-  rollover: boolean;
+  recurring_task_id?: string | null;
 }
 
 interface TaskCardProps {
@@ -103,7 +103,7 @@ export function TaskCard({ task, onToggle, onDelete, onEdit, style, readOnly }: 
       </div>
 
       {/* Routine badge */}
-      {task.rollover && (
+      {task.recurring_task_id && (
         <span
           className="flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded bg-white/5 border border-white/5 text-muted-foreground/50 tracking-widest"
         >

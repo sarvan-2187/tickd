@@ -28,7 +28,7 @@ export async function GET(request: Request) {
         const appPassword = decrypt(user.app_password);
 
         const tasks = await sql`
-          SELECT id, title, status
+          SELECT id, title, status, recurring_task_id
           FROM tasks
           WHERE user_id = ${user.id}
           AND task_date = ${today}
@@ -49,6 +49,7 @@ export async function GET(request: Request) {
             id: string;
             title: string;
             status: "pending" | "completed";
+            recurring_task_id: string | null;
           }[],
           dateStr
         );

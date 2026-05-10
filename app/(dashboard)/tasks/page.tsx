@@ -10,8 +10,8 @@ interface Task {
   id: string;
   title: string;
   status: "pending" | "completed";
-  rollover: boolean;
   task_date: string;
+  recurring_task_id?: string | null;
 }
 
 export default function TasksPage() {

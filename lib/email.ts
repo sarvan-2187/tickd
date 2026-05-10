@@ -4,6 +4,7 @@ type Task = {
   id: string;
   title: string;
   status: "pending" | "completed";
+  recurring_task_id?: string | null;
 };
 
 /**
@@ -97,8 +98,12 @@ export async function sendNightlyReport(
 
   const taskRow = (t: Task) => `
     <tr>
-      <td style="padding: 12px 16px; border-bottom: 1px solid #2a2a2a; color: ${t.status === "completed" ? "#22c55e" : "#ef4444"};">
-        ${t.status === "completed" ? "✅" : "⏳"} ${t.title}
+      <td style="padding: 12px 16px; border-bottom: 1px solid #2a2a2a; color: ${t.status === "completed" ? "#22c55e" : "#ef4444"}; font-size: 14px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span>${t.status === "completed" ? "✅" : "⏳"}</span>
+          <span>${t.title}</span>
+          ${t.recurring_task_id ? `<span style="font-size: 9px; font-weight: 800; color: #6b7280; border: 1px solid #2a2a2a; padding: 1px 4px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; margin-left: 4px;">Routine</span>` : ""}
+        </div>
       </td>
       <td style="padding: 12px 16px; border-bottom: 1px solid #2a2a2a; text-align: right;">
         <span style="display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 12px; font-weight: 600;
